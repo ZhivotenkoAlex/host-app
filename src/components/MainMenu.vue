@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { ref } from "vue"
+import { ref, markRaw } from "vue"
 import { defineAsyncComponent } from "vue"
 
 export default {
@@ -25,16 +25,16 @@ export default {
       try {
         if (pkg === "A") {
           const module = await import("packageA/TextA")
-          currentComponent.value = module.default
+          currentComponent.value = markRaw(module.default)
         } else {
           const module = await import("packageB/TextB")
-          currentComponent.value = module.default
+          currentComponent.value = markRaw(module.default)
         }
       } catch (err) {
         console.error("Failed to load component:", err)
-        currentComponent.value = {
+        currentComponent.value = markRaw({
           template: "<div>Error loading component</div>",
-        }
+        })
       }
     }
 

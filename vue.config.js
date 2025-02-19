@@ -1,24 +1,25 @@
 const { defineConfig } = require('@vue/cli-service')
 const ModuleFederationPlugin = require('webpack').container.ModuleFederationPlugin
+const webpack = require('webpack')
 
 module.exports = defineConfig({
-  // publicPath: 'http://localhost:8080/',
-  publicPath: 'https://package-host.web.app/',
+  publicPath: process.env.VUE_APP_PUBLIC_PATH,
   configureWebpack: {
     optimization: {
       splitChunks: false
     },
     plugins: [
+      new webpack.DefinePlugin({
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
+        __VUE_PROD_DEVTOOLS__: false,
+      }),
       new ModuleFederationPlugin({
         name: 'host',
         filename: 'remoteEntry.js',
         remotes: {
-          // packageA: 'packageA@http://localhost:8081/remoteEntry.js',
-          // packageB: 'packageB@http://localhost:8082/remoteEntry.js',
-          // menu: 'menu@http://localhost:8083/remoteEntry.js'
-          packageA: 'packageA@https://package-a.web.app/remoteEntry.js',
-          packageB: 'packageB@https://package-b.web.app/remoteEntry.js',
-          menu: 'menu@https://package-menu.web.app/remoteEntry.js'
+          packageA: `packageA@${process.env.VUE_APP_PACKAGE_A_URL}/remoteEntry.js`,
+          packageB: `packageB@${process.env.VUE_APP_PACKAGE_B_URL}/remoteEntry.js`,
+          menu: `menu@${process.env.VUE_APP_MENU_URL}/remoteEntry.js`
         },
         shared: {
           vue: {
