@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Micro-Frontend Demo</h1>
+    <h1>Package Host Demo</h1>
     <MainMenu />
   </div>
 </template>
